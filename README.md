@@ -149,6 +149,167 @@ Here are the fundamentals that should be covered to give students a foundation t
   - Principles of CI/CD and its benefits
   - Common CI/CD tools: Jenkins, GitLab CI, CircleCI
   - Setting up and configuring CI/CD pipelines
+ 
+# Compiling/Building Artifact for Docker Registries
+
+Understanding how different programming languages compile and run is crucial for effectively packaging them into containers. Here’s an overview of the compilation and runtime processes for Java, Go, Node.js, and Python, and how to package applications written in these languages into containers.
+
+### Java
+Java is a statically typed, compiled language that runs on the Java Virtual Machine (JVM).
+
+#### Compilation Process
+1. **Source Code**: Written in `.java` files.
+2. **Compilation**: Compiled into bytecode using the `javac` compiler, generating `.class` files.
+3. **Execution**: Bytecode is executed on the JVM.
+
+#### Packaging into Containers
+1. **Dockerfile Example**:
+   ```Dockerfile
+   # Use an official OpenJDK runtime as a parent image
+   FROM openjdk:11-jre-slim
+
+   # Set the working directory in the container
+   WORKDIR /app
+
+   # Copy the compiled jar file to the container
+   COPY target/myapp.jar /app/myapp.jar
+
+   # Command to run the jar file
+   ENTRYPOINT ["java", "-jar", "myapp.jar"]
+   ```
+
+2. **Build and Run**:
+   ```sh
+   # Build the Docker image
+   docker build -t my-java-app .
+
+   # Run the Docker container
+   docker run -d -p 8080:8080 my-java-app
+   ```
+
+### Go
+Go (Golang) is a statically typed, compiled language known for its simplicity and performance.
+
+#### Compilation Process
+1. **Source Code**: Written in `.go` files.
+2. **Compilation**: Compiled into a standalone binary using the `go build` command.
+3. **Execution**: The binary is executed directly on the operating system.
+
+#### Packaging into Containers
+1. **Dockerfile Example**:
+   ```Dockerfile
+   # Use the official Golang image to build the application
+   FROM golang:1.16-alpine as builder
+
+   # Set the working directory inside the container
+   WORKDIR /app
+
+   # Copy the source code to the container
+   COPY . .
+
+   # Build the Go app
+   RUN go build -o myapp .
+
+   # Use a minimal base image
+   FROM alpine:latest
+
+   # Set the working directory inside the container
+   WORKDIR /app
+
+   # Copy the binary from the builder stage
+   COPY --from=builder /app/myapp .
+
+   # Command to run the binary
+   ENTRYPOINT ["./myapp"]
+   ```
+
+2. **Build and Run**:
+   ```sh
+   # Build the Docker image
+   docker build -t my-go-app .
+
+   # Run the Docker container
+   docker run -d -p 8080:8080 my-go-app
+   ```
+
+### Node.js
+Node.js is a runtime environment that allows the execution of JavaScript on the server side.
+
+#### Execution Process
+1. **Source Code**: Written in `.js` files.
+2. **Execution**: Run directly using the Node.js runtime.
+
+#### Packaging into Containers
+1. **Dockerfile Example**:
+   ```Dockerfile
+   # Use the official Node.js image
+   FROM node:14
+
+   # Set the working directory inside the container
+   WORKDIR /app
+
+   # Copy package.json and package-lock.json
+   COPY package*.json ./
+
+   # Install dependencies
+   RUN npm install
+
+   # Copy the rest of the application code
+   COPY . .
+
+   # Expose the application port
+   EXPOSE 8080
+
+   # Command to run the app
+   CMD ["node", "app.js"]
+   ```
+
+2. **Build and Run**:
+   ```sh
+   # Build the Docker image
+   docker build -t my-node-app .
+
+   # Run the Docker container
+   docker run -d -p 8080:8080 my-node-app
+   ```
+
+### Python
+Python is an interpreted, dynamically typed language.
+
+#### Execution Process
+1. **Source Code**: Written in `.py` files.
+2. **Execution**: Run directly using the Python interpreter.
+
+#### Packaging into Containers
+1. **Dockerfile Example**:
+   ```Dockerfile
+   # Use the official Python image
+   FROM python:3.9-slim
+
+   # Set the working directory inside the container
+   WORKDIR /app
+
+   # Copy the requirements file and install dependencies
+   COPY requirements.txt .
+   RUN pip install --no-cache-dir -r requirements.txt
+
+   # Copy the rest of the application code
+   COPY . .
+
+   # Command to run the app
+   CMD ["python", "app.py"]
+   ```
+
+2. **Build and Run**:
+   ```sh
+   # Build the Docker image
+   docker build -t my-python-app .
+
+   # Run the Docker container
+   docker run -d -p 8080:8080 my-python-app
+   ```
+
+By understanding these languages' compilation and runtime processes, you can effectively package and deploy applications in containers, ensuring consistent and isolated environments.
 
 ### Common CI/CD Platforms
 #### AWS CodePipeline
