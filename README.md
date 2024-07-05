@@ -216,3 +216,139 @@ Here are the fundamentals that should be covered to give students a foundation t
       ```
 
 ---
+
+Advanced Topics
+
+# Linux Kernel Features around Containers
+
+Understanding the core components of how containers work is essential. Containers are not VMs; they are more like lightweight, isolated environments or service wrappers. LXD and Docker are container management systems that rely on various Linux kernel components and user-space tools to facilitate their functionality. Here are the key Linux components that underpin LXD and Docker:
+
+### Linux Kernel Features
+
+1. **Namespaces**
+   - **PID Namespace**: Isolates process IDs so that processes inside a container have their own PID space.
+   - **Net Namespace**: Provides isolated network stacks, including interfaces, routing tables, and IP addresses.
+   - **IPC Namespace**: Isolates inter-process communication mechanisms (e.g., System V IPC, POSIX message queues).
+   - **UTS Namespace**: Allows containers to have their own hostname and domain name.
+   - **Mount Namespace**: Isolates filesystem mount points, allowing each container to have its own filesystem hierarchy.
+   - **User Namespace**: Provides user and group ID isolation, enabling containers to run as a non-root user on the host.
+
+2. **Control Groups (cgroups)**
+   - **Resource Limitation**: Limits the resources (CPU, memory, disk I/O) that a container can use.
+   - **Prioritization**: Sets priority levels for resource access.
+   - **Accounting**: Tracks resource usage by each container.
+   - **Control**: Freezes and resumes groups of processes, making it possible to pause and resume containers.
+
+3. **Seccomp (Secure Computing Mode)**
+   - Provides a mechanism to restrict system calls that a container can make, enhancing security.
+
+4. **Capabilities**
+   - Allows fine-grained control over the privileges that a containerized process can have, reducing the need for full root privileges.
+
+5. **OverlayFS**
+   - A type of union filesystem that allows multiple filesystems to be overlaid, enabling the creation of layers used by Docker images.
+
+6. **AppArmor/SELinux**
+   - Provides mandatory access control (MAC) to restrict what a containerized process can do, adding an extra layer of security.
+
+### User-Space Tools and Libraries
+
+1. **LXC (Linux Containers)**
+   - The foundation for LXD, LXC provides tools and templates to create and manage containers using the kernel's namespaces and cgroups.
+
+2. **liblxc**
+   - A library used by LXD for managing LXC containers programmatically.
+
+3. **containerd**
+   - An industry-standard core container runtime that manages the container lifecycle (creation, execution, and destruction) and is used by Docker.
+
+4. **runc**
+   - A CLI tool for spawning and running containers according to the Open Container Initiative (OCI) specification. It is used by Docker as the default low-level container runtime.
+
+5. **criu (Checkpoint/Restore In Userspace)**
+   - Used by LXD for live migration of containers. It allows for checkpointing a running container and restoring it later or on another machine.
+
+### LXD-Specific Components
+
+1. **LXD Daemon**
+   - The central service for LXD that handles API requests, manages container instances, networks, storage pools, and more.
+
+2. **LXD Client**
+   - The command-line client (`lxc`) used to interact with the LXD daemon.
+
+3. **ZFS, Btrfs, and Other Filesystems**
+   - LXD can use advanced filesystems like ZFS and Btrfs to provide efficient storage management features like snapshots and clones.
+
+### Docker-Specific Components
+
+1. **Docker Daemon (`dockerd`)**
+   - The core service that manages Docker containers, images, networks, and storage.
+
+2. **Docker CLI (`docker`)**
+   - The command-line interface used to interact with the Docker daemon.
+
+3. **Docker Images**
+   - Read-only templates used to create containers. Images are composed of multiple layers stacked using OverlayFS.
+
+4. **Docker Compose**
+   - A tool for defining and running multi-container Docker applications using a YAML file.
+
+### Example: Basic Docker Workflow
+
+Here’s a simple example to demonstrate a basic Docker workflow:
+
+1. **Pull an Image**
+   ```sh
+   docker pull nginx
+   ```
+
+2. **Run a Container**
+   ```sh
+   docker run -d -p 80:80 --name mynginx nginx
+   ```
+
+3. **List Running Containers**
+   ```sh
+   docker ps
+   ```
+
+4. **Stop a Container**
+   ```sh
+   docker stop mynginx
+   ```
+
+5. **Remove a Container**
+   ```sh
+   docker rm mynginx
+   ```
+
+### Example: Basic LXD Workflow
+
+Here’s a simple example to demonstrate a basic LXD workflow:
+
+1. **Initialize LXD**
+   ```sh
+   lxd init
+   ```
+
+2. **Launch a Container**
+   ```sh
+   lxc launch ubuntu:20.04 mycontainer
+   ```
+
+3. **List Running Containers**
+   ```sh
+   lxc list
+   ```
+
+4. **Stop a Container**
+   ```sh
+   lxc stop mycontainer
+   ```
+
+5. **Delete a Container**
+   ```sh
+   lxc delete mycontainer
+   ```
+
+These Linux components and tools together provide the foundation for containerization, enabling systems like LXD and Docker to offer robust, isolated, and manageable environments for applications.
