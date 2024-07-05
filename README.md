@@ -89,6 +89,96 @@ Here are the fundamentals that should be covered to give students a foundation t
   - Overview of sh, bash
   - Key features and differences
   - Writing portable shell scripts and considerations for cloud automation
+ 
+#### Remote connecting using SSH
+## Summary of SSH
+
+### Introduction to SSH
+
+SSH (Secure Shell) is a powerful and secure protocol used to connect to and manage Linux and Unix-like systems remotely. Just as Remote Desktop Protocol (RDP) is commonly used to access Windows systems, SSH is the standard method for accessing Linux systems.
+
+### Why SSH is Important
+
+- **Security**: SSH provides strong encryption, ensuring that data transmitted between the client and server is secure and protected from eavesdropping.
+- **Versatility**: SSH is not just for remote login; it can be used for executing commands, transferring files, and more.
+- **Portability**: SSH can be used across different platforms and operating systems.
+
+### Key Features of SSH
+
+#### SSH Keys
+
+SSH keys are a pair of cryptographic keys (a private key and a public key) used for authenticating users in a secure manner. Using SSH keys is more secure than password-based authentication.
+
+##### NOTE: most cloud provisioned linux vm do NOT allow for password based auth, and must use SSH keys
+
+**Creating SSH Keys**:
+```sh
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+This command generates a new SSH key pair. The `-t rsa` specifies the type of key to create, `-b 4096` specifies the number of bits in the key, and `-C` adds a comment to the key.
+
+**Adding SSH Keys to the SSH Agent**:
+```sh
+ssh-add ~/.ssh/id_rsa
+```
+This command adds your private key to the SSH agent, which manages your keys and makes them available for SSH sessions.
+
+**Copying SSH Keys to a Server**:
+```sh
+ssh-copy-id user@server
+```
+This command copies your public key to the server, allowing you to authenticate without a password.
+
+#### SSH Configuration
+
+SSH configuration files can be used to simplify and manage multiple SSH connections.
+
+**Example `.ssh/config` File**:
+```
+Host myserver
+    HostName myserver.example.com
+    User myusername
+    IdentityFile ~/.ssh/id_rsa
+    Port 22
+```
+This configuration allows you to connect to `myserver` with a simple command (`ssh myserver`) instead of specifying the hostname, username, and other details each time.
+
+#### Basic SSH Commands
+
+- **Connecting to a Server**:
+  ```sh
+  ssh user@hostname
+  ```
+
+- **Executing a Command on a Remote Server**:
+  ```sh
+  ssh user@hostname "command"
+  ```
+
+- **Transferring Files with SCP**:
+  ```sh
+  scp file.txt user@hostname:/path/to/destination
+  ```
+
+#### SSHFS (SSH Filesystem)
+
+SSHFS allows you to mount a remote filesystem over SSH, enabling you to access files on a remote server as if they were on your local machine.
+
+**Mounting a Remote Filesystem**:
+```sh
+sshfs user@hostname:/remote/path /local/mount/point
+```
+
+**Unmounting a Remote Filesystem**:
+```sh
+fusermount -u /local/mount/point
+```
+
+#### Advanced Utilities
+
+- **`ssh-add`**: Adds private key identities to the SSH agent.
+- **`ssh-copy-id`**: Copies public keys to a remote server for key-based authentication.
+
 
 #### Package Managers
 - **Managing Software**
