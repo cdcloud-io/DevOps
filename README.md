@@ -90,11 +90,7 @@ Here are the fundamentals that should be covered to give students a foundation t
   - Key features and differences
   - Writing portable shell scripts and considerations for cloud automation
  
-#### Remote connecting using SSH
-## Summary of SSH
-
-### Introduction to SSH
-
+#### Remote connecting using SSH (like RDP for Windows but better)
 SSH (Secure Shell) is a powerful and secure protocol used to connect to and manage Linux and Unix-like systems remotely. Just as Remote Desktop Protocol (RDP) is commonly used to access Windows systems, SSH is the standard method for accessing Linux systems.
 
 ### Why SSH is Important
