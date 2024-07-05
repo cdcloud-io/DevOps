@@ -76,17 +76,17 @@ Here are the fundamentals that should be covered to give students a foundation t
 - **Text Editors**
   - Basics of nano: editing, saving, and exiting
   - Introduction to vi/vim: modes, basic commands, editing
-  - Advanced vi/vim usage and neovim extensions
+  - Advanced vi/vim usage and neovim extensions (optional)
 
 #### File Systems
 - **Common File Systems**
   - Characteristics of ext4 and its usage
   - Overview of ZFS and its advanced features (snapshots, replication)
-  - Choosing the right file system for different use cases
+  - Choosing the right file system for different use cases (optional)
 
 #### Shells
 - **Different Shells**
-  - Overview of sh, bash, and zsh
+  - Overview of sh, bash
   - Key features and differences
   - Writing portable shell scripts and considerations for cloud automation
 
@@ -100,7 +100,7 @@ Here are the fundamentals that should be covered to give students a foundation t
 - **Service Management**
   - Understanding init.d and the transition to systemd
   - Managing services with systemd: `systemctl start`, `stop`, `enable`
-  - Creating and configuring systemd service units
+  - Creating and configuring systemd service units (how to make an app a service)
 
 #### Logging
 - **System Logging**
